@@ -16,7 +16,7 @@ public class BankService {
     private final ClientRepository clientRepository;
     private final AccountRepository accountRepository;
     private final FiscService fiscService;
-    rivate final NotificationService notificationService;
+    private final NotificationService notificationService;
 
     public BankService(ClientRepository clientRepository, AccountRepository accountRepository,
                        FiscService fiscService, NotificationService notificationService) {
