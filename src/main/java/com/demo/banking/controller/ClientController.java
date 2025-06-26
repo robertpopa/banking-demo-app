@@ -2,8 +2,10 @@ package com.demo.banking.controller;
 
 import com.demo.banking.model.Client;
 import com.demo.banking.model.Currency;
+import com.demo.banking.model.ErrorResponse;
 import com.demo.banking.service.BankService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.support.ErrorMessage;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,9 +25,14 @@ public class ClientController {
     }
 
     @DeleteMapping("/{cnp}")
-    public ResponseEntity<Void> closeAccounts(@PathVariable String cnp) {
-        bankService.closeAccounts(cnp);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> closeAccounts(@PathVariable String cnp) {
+        try {
+            bankService.closeAccounts(cnp);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Closing your account failed: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/{cnp}")
@@ -43,11 +50,16 @@ public class ClientController {
     }
 
     @PostMapping("/{cnp}/withdraw")
-    public ResponseEntity<Void> withdraw(
+    public ResponseEntity<?> withdraw(
             @PathVariable String cnp,
             @RequestParam Currency currency,
             @RequestParam BigDecimal amount) {
-        bankService.withdraw(cnp, currency, amount);
-        return ResponseEntity.ok().build();
+        try {
+            bankService.withdraw(cnp, currency, amount);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Withdraw operation failed: " + e.getMessage()));
+        }
     }
 }
