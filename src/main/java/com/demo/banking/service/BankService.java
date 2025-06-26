@@ -16,12 +16,14 @@ public class BankService {
     private final ClientRepository clientRepository;
     private final AccountRepository accountRepository;
     private final FiscService fiscService;
+    rivate final NotificationService notificationService;
 
     public BankService(ClientRepository clientRepository, AccountRepository accountRepository,
-                       FiscService fiscService) {
+                       FiscService fiscService, NotificationService notificationService) {
         this.clientRepository = clientRepository;
         this.accountRepository = accountRepository;
         this.fiscService = fiscService;
+        this.notificationService = notificationService;
     }
 
     // Client operations
@@ -75,6 +77,10 @@ public class BankService {
         // Save the updated account
         accountRepository.save(account);
 
+        // Notify tax authority asynchronously if client is monitored
+        if (client.isMonitored()) {
+            notificationService.notifyBalanceChange(client, previousRonBalance, previousEuroBalance);
+        }
     }
 
     public void withdraw(String cnp, Currency currency, BigDecimal amount) {
@@ -107,6 +113,10 @@ public class BankService {
         // Save the updated account
         accountRepository.save(account);
 
+        // Notify tax authority asynchronously if client is monitored
+        if (client.isMonitored()) {
+            notificationService.notifyBalanceChange(client, previousRonBalance, previousEuroBalance);
+        }
     }
 
     /**
@@ -127,6 +137,10 @@ public class BankService {
         accountRepository.save(client.getRonAccount());
         accountRepository.save(client.getEuroAccount());
 
+        // Notify tax authority asynchronously if client is monitored
+        if (client.isMonitored()) {
+            notificationService.notifyBalanceChange(client, previousRonBalance, previousEuroBalance);
+        }
     }
 
     public Client getAccountInfo(String cnp) {
