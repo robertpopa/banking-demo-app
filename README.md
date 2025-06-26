@@ -92,3 +92,42 @@ The application can be run using Docker and Docker Compose, which will set up bo
 ### FISC API
 - `POST /api/fisc/monitor/{cnp}` - Start monitoring a client
 - `DELETE /api/fisc/monitor/{cnp}` - Stop monitoring a client
+
+### Client API Commands
+1. Create Accounts for a Client   
+   ```
+   curl -X POST "http://localhost:8080/api/clients/1234567890123" -H "Content-Type: application/json"
+   ```
+2. Get Client Account Information
+   ```
+   curl -X GET "http://localhost:8080/api/clients/1234567890123" -H "Accept: application/json"
+   ```
+3. Deposit Money   
+   
+   ```
+   curl -X POST "http://localhost:8080/api/clients/1234567890123/deposit?currency=RON&amount=2000.00" -H "Content-Type: application/json"
+   ```
+   ```
+   curl -X POST "http://localhost:8080/api/clients/1234567890123/deposit?currency=EUR&amount=1500.00" -H "Content-Type: application/json"
+   ```
+4. Withdraw Money
+   ```
+   curl -X POST "http://localhost:8080/api/clients/1234567890123/withdraw?currency=RON&amount=1500.00" -H "Content-Type: application/json"
+   ```
+   ```
+   curl -X POST "http://localhost:8080/api/clients/1234567890123/withdraw?currency=EUR&amount=1000.00" -H "Content-Type: application/json"
+   ```
+5. Close Client Accounts
+   ```
+   curl -X DELETE "http://localhost:8080/api/clients/1234567890123" -H "Content-Type: application/json"
+   ```
+   
+### FISC (Tax Authority) API Commands
+1. Start Monitoring a Client
+   ```
+   curl -X POST "http://localhost:8080/api/fisc/monitor/1234567890123" -H "Content-Type: application/json"
+   ```
+2. Stop Monitoring a Client
+   ```
+   curl -X DELETE "http://localhost:8080/api/fisc/monitor/1234567890123" -H "Content-Type: application/json"
+   ```
