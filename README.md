@@ -2,6 +2,10 @@
 
 This is a Java Spring Boot application that demonstrates a banking system with tax authority monitoring capabilities. The application uses an in-memory H2 database for data persistence.
 
+## System Architecture
+
+![architecture.png](architecture.png)
+
 ## Technology Stack
 
 - Java 17
